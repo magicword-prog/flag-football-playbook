@@ -89,14 +89,20 @@ def render(play, outdir):
         t = n / FPS
         players = [(name, pos_at(wps, t)) for name, wps in play['players']]
         pmap = dict(players)
-        # ball: list of (time, carrier_or_xy). Carrier 'PRESNAP' floats above C.
-        carrier = None
+        # ball: list of (time, carrier). Carrier 'PRESNAP' floats above C.
+        # A carrier of ('pass', from, to, t_end) animates the ball flying from -> to.
+        carrier, ct = None, 0
         for bt, c in play['ball']:
             if t >= bt:
-                carrier = c
+                carrier, ct = c, bt
         if carrier == 'PRESNAP':
             cx, cy = pmap['C']
             ball = (cx, cy - 26)
+        elif isinstance(carrier, tuple) and carrier[0] == 'pass':
+            _, frm, to, t_end = carrier
+            f = min(1, (t - ct) / (t_end - ct)) if t_end > ct else 1
+            (x0, y0), (x1, y1) = pmap[frm], pmap[to]
+            ball = (x0 + (x1 - x0) * f, y0 + (y1 - y0) * f)
         else:
             ball = pmap[carrier]
         draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png')
@@ -131,6 +137,21 @@ PLAYS[12] = {
         ('B', [(0, 514, 354), (0.4, 514, 354), (1.5, 428, 330), (2.5, 275, 268), (3.1, 232, 214), (5.0, 212, 112)]),
         ('P', [(0, 325, 345), (0.3, 325, 345), (1.1, 408, 306), (2.1, 520, 295), (2.8, 562, 214), (5.0, 588, 106)]),
         ('QB', [(0, 399, 252), (0.45, 399, 252), (1.0, 399, 290), (1.6, 399, 290), (2.6, 390, 302), (5.0, 386, 304)]),
+    ],
+}
+
+# ------- Play 15: Shovel Pass to Green (must-pass) -------
+PLAYS[15] = {
+    'title': 'Play 15: Shovel Pass to Green',
+    'subtitle': 'Tight 5-across line — everyone walks upfield, Green slides into the middle for a quick forward shovel',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.7, ('pass', 'QB', 'G', 3.0)), (3.0, 'G')],
+    'players': [
+        ('R', [(0, 319, 214), (0.6, 319, 214), (5.0, 319, 118)]),
+        ('P', [(0, 359, 214), (0.6, 359, 214), (5.0, 359, 124)]),
+        ('C', [(0, 399, 214), (0.6, 399, 214), (5.0, 399, 116)]),
+        ('B', [(0, 439, 214), (0.6, 439, 214), (5.0, 439, 122)]),
+        ('G', [(0, 479, 214), (0.6, 479, 214), (1.4, 440, 220), (2.3, 402, 204), (3.2, 402, 204), (5.0, 402, 150)]),
+        ('QB', [(0, 399, 252), (0.45, 399, 252), (1.0, 399, 278), (3.0, 399, 278), (5.0, 392, 284)]),
     ],
 }
 
