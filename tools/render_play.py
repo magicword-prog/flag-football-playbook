@@ -134,6 +134,21 @@ PLAYS[12] = {
     ],
 }
 
+# ------- Play 14: Criss-Cross Quick Handoff to Purple -------
+PLAYS[14] = {
+    'title': 'Play 14: Criss-Cross Quick Handoff to Purple',
+    'subtitle': 'Same criss-cross action, but Purple takes a quick handoff on his first cross and runs up the right side',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.1, 'P')],
+    'players': [
+        ('R', [(0, 284, 214), (0.5, 284, 214), (1.4, 284, 150), (2.5, 360, 108), (4.0, 385, 98), (5.0, 390, 96)]),
+        ('G', [(0, 644, 214), (0.5, 644, 214), (1.6, 644, 142), (2.7, 560, 138), (4.0, 535, 136), (5.0, 530, 136)]),
+        ('C', [(0, 399, 214), (0.7, 399, 214), (5.0, 399, 128)]),
+        ('B', [(0, 514, 354), (0.6, 514, 354), (1.6, 428, 318), (2.4, 340, 300), (3.0, 310, 214), (5.0, 293, 110)]),
+        ('P', [(0, 325, 345), (0.3, 325, 345), (1.1, 408, 306), (2.1, 520, 295), (2.8, 562, 214), (5.0, 588, 106)]),
+        ('QB', [(0, 399, 252), (0.45, 399, 252), (1.0, 399, 288), (1.8, 399, 288), (2.6, 388, 300), (5.0, 384, 302)]),
+    ],
+}
+
 # ------- Play 13: Criss-Cross Fake Reverse, Blue Keeps It -------
 PLAYS[13] = {
     'title': 'Play 13: Criss-Cross Fake Reverse, Blue Keeps It',
