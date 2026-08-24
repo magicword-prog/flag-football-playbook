@@ -57,7 +57,7 @@
     min-width: 280px;
   }
   select:focus { outline: 2px solid #4a9eff; }
-  #formationSelect { min-width: 110px; }
+  #formationSelect, #typeSelect { min-width: 110px; }
   .content {
     padding: 24px 28px 28px 28px;
   }
@@ -164,6 +164,12 @@
         <option value="trips">Trips</option>
         <option value="base">Base</option>
       </select>
+      <label for="typeSelect">Type:</label>
+      <select id="typeSelect">
+        <option value="all">All</option>
+        <option value="run">Run</option>
+        <option value="pass">Pass</option>
+      </select>
       <label for="playSelect">Play:</label>
       <select id="playSelect"></select>
     </div>
@@ -233,11 +239,14 @@ const formations = {
   },
 };
 
+const PASS_PLAYS = new Set(["t3", "b5", "b10"]);
+
 const video = document.getElementById("playVideo");
 const titleEl = document.getElementById("playTitle");
 const descEl = document.getElementById("playDesc");
 const selectEl = document.getElementById("playSelect");
 const formationEl = document.getElementById("formationSelect");
+const typeEl = document.getElementById("typeSelect");
 const noteEl = document.getElementById("formationNote");
 
 function loadPlay(key) {
@@ -249,17 +258,28 @@ function loadPlay(key) {
   video.play().catch(() => {});
 }
 
-function loadFormation(name) {
-  const f = formations[name];
+function filteredPlays() {
+  const f = formations[formationEl.value];
+  const type = typeEl.value;
+  return f.plays.filter((key) => {
+    if (type === "pass") return PASS_PLAYS.has(key);
+    if (type === "run") return !PASS_PLAYS.has(key);
+    return true;
+  });
+}
+
+function loadFormation() {
+  const f = formations[formationEl.value];
   noteEl.textContent = f.note;
+  const keys = filteredPlays();
   selectEl.innerHTML = "";
-  for (const key of f.plays) {
+  for (const key of keys) {
     const opt = document.createElement("option");
     opt.value = key;
     opt.textContent = plays[key].title;
     selectEl.appendChild(opt);
   }
-  loadPlay(f.plays[0]);
+  loadPlay(keys[0]);
 }
 
 function restart() {
@@ -272,10 +292,11 @@ function normal() { video.playbackRate = 1.0; }
 function faster() { video.playbackRate = 1.5; }
 
 selectEl.addEventListener("change", (e) => loadPlay(e.target.value));
-formationEl.addEventListener("change", (e) => loadFormation(e.target.value));
+formationEl.addEventListener("change", loadFormation);
+typeEl.addEventListener("change", loadFormation);
 
 // Load first formation on startup
-loadFormation("trips");
+loadFormation();
 </script>
 
 </body>
