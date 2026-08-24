@@ -110,9 +110,9 @@ def render(play, outdir):
 
 PLAYS = {}
 
-# ---------------- Play 11: Criss-Cross ----------------
-PLAYS[11] = {
-    'title': 'Play 11: Criss-Cross',
+# ---------------- Base Play 1: Criss-Cross ----------------
+PLAYS['b1'] = {
+    'title': 'Play 1: Criss-Cross',
     'subtitle': 'Fake to Blue crossing right — Purple follows through, takes the handoff, and heads up the left side',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.6, 'P')],
     'players': [
@@ -125,9 +125,9 @@ PLAYS[11] = {
     ],
 }
 
-# ------------- Play 12: Criss-Cross Reverse -------------
-PLAYS[12] = {
-    'title': 'Play 12: Criss-Cross Reverse',
+# ------------- Base Play 2: Criss-Cross Reverse -------------
+PLAYS['b2'] = {
+    'title': 'Play 2: Criss-Cross Reverse',
     'subtitle': 'Fake to Blue, handoff to Purple going left — Purple hands to Red on the reverse up the right side',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.5, 'P'), (2.5, 'R')],
     'players': [
@@ -140,9 +140,9 @@ PLAYS[12] = {
     ],
 }
 
-# ------- Play 15: Shovel Pass to Green (must-pass) -------
-PLAYS[15] = {
-    'title': 'Play 15: Shovel Pass to Green',
+# ------- Base Play 5: Shovel Pass to Green (must-pass) -------
+PLAYS['b5'] = {
+    'title': 'Play 5: Shovel Pass to Green',
     'subtitle': 'Tight 5-across line — everyone walks upfield, Green slides into the middle for a quick forward shovel',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.7, ('pass', 'QB', 'G', 3.0)), (3.0, 'G')],
     'players': [
@@ -155,9 +155,9 @@ PLAYS[15] = {
     ],
 }
 
-# ------- Play 14: Criss-Cross Quick Handoff to Blue -------
-PLAYS[14] = {
-    'title': 'Play 14: Criss-Cross Quick Handoff to Blue',
+# ------- Base Play 4: Criss-Cross Quick Handoff to Blue -------
+PLAYS['b4'] = {
+    'title': 'Play 4: Criss-Cross Quick Handoff to Blue',
     'subtitle': 'Same criss-cross action, but Blue takes a quick handoff on his first cross and runs up the right side',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.1, 'B')],
     'players': [
@@ -170,10 +170,10 @@ PLAYS[14] = {
     ],
 }
 
-# ------- Play 13: Criss-Cross Fake Reverse, Purple Keeps It -------
-PLAYS[13] = {
-    'title': 'Play 13: Criss-Cross Fake Reverse, Purple Keeps It',
-    'subtitle': 'Same action as Play 12, but Purple fakes the reverse to Red, keeps it, and heads up the left side',
+# ------- Base Play 3: Criss-Cross Fake Reverse, Purple Keeps It -------
+PLAYS['b3'] = {
+    'title': 'Play 3: Criss-Cross Fake Reverse, Purple Keeps It',
+    'subtitle': 'Same action as Play 2, but Purple fakes the reverse to Red, keeps it, and heads up the left side',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.5, 'P')],
     'players': [
         ('R', [(0, 235, 214), (0.4, 235, 214), (1.2, 205, 258), (2.0, 238, 272), (2.5, 275, 268), (3.5, 470, 262), (4.2, 590, 240), (4.5, 608, 214), (5.0, 622, 130)]),
@@ -186,7 +186,7 @@ PLAYS[13] = {
 }
 
 if __name__ == '__main__':
-    n = int(sys.argv[1])
+    n = sys.argv[1]
     outdir = f'.videos/frames{n}'
     render(PLAYS[n], outdir)
     subprocess.run(['ffmpeg', '-y', '-v', 'error', '-framerate', '30', '-i', f'{outdir}/f%04d.png',
