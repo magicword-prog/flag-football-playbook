@@ -41,7 +41,7 @@ def pos_at(waypoints, t):
     return waypoints[-1][1], waypoints[-1][2]
 
 
-def draw_frame(title, subtitle, players, ball_xy, out_path):
+def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y):
     img = Image.new('RGB', (W * SS, H * SS), 'white')
     d = ImageDraw.Draw(img)
     s = SS
@@ -55,8 +55,8 @@ def draw_frame(title, subtitle, players, ball_xy, out_path):
     for yy in YARD_YS:
         d.line([(x0, yy * s), (x1, yy * s)], fill=(211, 211, 211), width=s)
     d.rectangle([x0, y0, x1, y1], outline='black', width=2 * s)
-    d.line([(x0, LOS_Y * s), (x1, LOS_Y * s)], fill='black', width=3 * s)
-    d.text((34 * s, 220 * s), 'LINE OF SCRIMMAGE', font=F_SMALL, fill='black')
+    d.line([(x0, los_y * s), (x1, los_y * s)], fill='black', width=3 * s)
+    d.text((34 * s, (los_y + 6) * s), 'LINE OF SCRIMMAGE', font=F_SMALL, fill='black')
     d.text((800 * s, 88 * s), '^ Direction of Play', font=F_SMALL, fill='black')
     # players (draw order: line players first, then backs, QB last so overlaps look right)
     r = 15 * s
@@ -85,7 +85,8 @@ def render(play, outdir):
     if os.path.isdir(outdir):
         shutil.rmtree(outdir)
     os.makedirs(outdir)
-    for n in range(NFRAMES):
+    nframes = int(FPS * play.get('dur', DUR))
+    for n in range(nframes):
         t = n / FPS
         players = [(name, pos_at(wps, t)) for name, wps in play['players']]
         pmap = dict(players)
@@ -105,7 +106,7 @@ def render(play, outdir):
             ball = (x0 + (x1 - x0) * f, y0 + (y1 - y0) * f)
         else:
             ball = pmap[carrier]
-        draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png')
+        draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png', play.get('los_y', LOS_Y))
 
 
 PLAYS = {}
@@ -204,14 +205,16 @@ PLAYS['b11'] = {
 PLAYS['b12'] = {
     'title': 'Play 12: Double Go, Deep Shot to Green',
     'subtitle': 'Red and Green sprint deep on go routes — QB drops straight back and throws deep to Green',
-    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.8, ('pass', 'QB', 'G', 2.8)), (2.8, 'G')],
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.6, ('pass', 'QB', 'G', 4.2)), (4.2, 'G')],
+    'los_y': 420,
+    'dur': 6.5,
     'players': [
-        ('R', [(0, 284, 214), (0.4, 284, 214), (1.5, 284, 150), (3.0, 290, 100), (5.0, 295, 90)]),
-        ('G', [(0, 644, 214), (0.4, 644, 214), (1.5, 642, 155), (2.8, 638, 112), (5.0, 628, 88)]),
-        ('C', [(0, 399, 214), (0.7, 399, 214), (5.0, 399, 150)]),
-        ('P', [(0, 514, 354), (0.5, 514, 354), (1.5, 500, 325), (5.0, 490, 305)]),
-        ('B', [(0, 325, 345), (0.5, 325, 345), (1.5, 340, 320), (5.0, 355, 300)]),
-        ('QB', [(0, 399, 252), (0.45, 399, 252), (1.2, 399, 310), (1.8, 399, 310), (2.2, 397, 308), (5.0, 396, 306)]),
+        ('R', [(0, 284, 420), (0.4, 284, 420), (1.6, 284, 330), (3.6, 290, 170), (5.2, 294, 105), (6.5, 296, 95)]),
+        ('G', [(0, 644, 420), (0.4, 644, 420), (1.6, 642, 330), (3.5, 640, 165), (4.3, 638, 115), (6.5, 628, 88)]),
+        ('C', [(0, 399, 420), (0.7, 399, 420), (6.5, 399, 356)]),
+        ('P', [(0, 514, 560), (0.5, 514, 560), (2.5, 498, 432), (3.2, 494, 426), (6.5, 490, 424)]),
+        ('B', [(0, 325, 551), (0.5, 325, 551), (2.5, 342, 430), (3.2, 346, 425), (6.5, 350, 423)]),
+        ('QB', [(0, 399, 458), (0.45, 399, 458), (1.2, 399, 516), (2.6, 399, 516), (3.0, 396, 512), (6.5, 395, 510)]),
     ],
 }
 
