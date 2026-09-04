@@ -82,6 +82,7 @@
     display: block;
     width: 100%;
     height: auto;
+    cursor: pointer;
   }
   .controls {
     display: flex;
@@ -180,13 +181,14 @@
     <p id="playDesc"></p>
 
     <div class="video-wrap">
-      <video id="playVideo" controls autoplay muted loop playsinline>
+      <video id="playVideo" muted playsinline preload="auto">
         Your browser does not support HTML5 video.
       </video>
     </div>
 
     <div class="controls">
-      <button onclick="restart()">▶ Replay</button>
+      <button id="playBtn" onclick="togglePlay()">▶ Play</button>
+      <button class="secondary" onclick="resetToFormation()">↺ Formation</button>
       <button class="secondary" onclick="slower()">Slower</button>
       <button class="secondary" onclick="normal()">Normal Speed</button>
       <button class="secondary" onclick="faster()">Faster</button>
@@ -255,9 +257,12 @@ function loadPlay(key) {
   const p = plays[key];
   titleEl.textContent = p.title;
   descEl.textContent = p.desc;
+  video.pause();
   video.src = p.src;
   video.load();
-  video.play().catch(() => {});
+  // Show the pre-snap formation (frame 0) and wait for Play.
+  video.addEventListener("loadedmetadata", () => { video.currentTime = 0; }, { once: true });
+  setPlayLabel("▶ Play");
 }
 
 function filteredPlays() {
@@ -284,10 +289,31 @@ function loadFormation() {
   loadPlay(keys[0]);
 }
 
-function restart() {
-  video.currentTime = 0;
-  video.play();
+const playBtn = document.getElementById("playBtn");
+
+function setPlayLabel(text) { playBtn.textContent = text; }
+
+function togglePlay() {
+  if (video.ended) {
+    video.currentTime = 0;
+    video.play();
+  } else if (video.paused) {
+    video.play();
+  } else {
+    video.pause();
+  }
 }
+
+function resetToFormation() {
+  video.pause();
+  video.currentTime = 0;
+  setPlayLabel("▶ Play");
+}
+
+video.addEventListener("play", () => setPlayLabel("⏸ Pause"));
+video.addEventListener("pause", () => { if (!video.ended) setPlayLabel("▶ Play"); });
+video.addEventListener("ended", () => setPlayLabel("▶ Replay"));
+video.addEventListener("click", togglePlay);
 
 function slower() { video.playbackRate = 0.5; }
 function normal() { video.playbackRate = 1.0; }
