@@ -201,13 +201,13 @@ PLAYS['b7'] = {
         purple_tail=[(3.5, 514, 300), (4.3, 520, 240), (6.0, 526, 110)]),
 }
 
-# ------- Base Play 8: Shovel Pass to Green (must-pass) -------
-PLAYS['b8'] = {
-    'title': 'Play 8: Shovel Pass to Green',
-    'subtitle': 'Tight 5-across line — everyone walks upfield, Green slides into the middle for a quick forward shovel',
+# ------- Base Play 11: Shovel Pass to Green (must-pass) -------
+PLAYS['b11'] = {
+    'title': 'Play 11: Shovel Pass to Green',
+    'subtitle': 'Tight line with Red wide left — everyone walks upfield, Green slides into the middle for a quick forward shovel',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.7, ('pass', 'QB', 'G', 3.0)), (3.0, 'G')],
     'players': [
-        ('R', [(0, 319, 214), (0.6, 319, 214), (5.0, 319, 118)]),
+        ('R', [(0, 154, 214), (0.6, 154, 214), (5.0, 154, 118)]),
         ('B', [(0, 359, 214), (0.6, 359, 214), (5.0, 359, 124)]),
         ('C', [(0, 399, 214), (0.6, 399, 214), (5.0, 399, 116)]),
         ('P', [(0, 439, 214), (0.6, 439, 214), (5.0, 439, 122)]),
