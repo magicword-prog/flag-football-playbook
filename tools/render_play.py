@@ -156,9 +156,54 @@ PLAYS['b3'] = {
     ],
 }
 
-# ------- Base Play 5: Shovel Pass to Green (must-pass) -------
+# ======= Base Plays 5-7: End-Around Red family (LOS one yard-line deeper for room) =======
+EA_LOS = 290
+def _ea_players(red_tail, green_tail, purple_tail):
+    return [
+        ('R', [(0, 154, 290), (0.4, 154, 290), (1.0, 300, 350), (1.6, 430, 372), (2.4, 590, 362), (2.9, 640, 352)] + red_tail),
+        ('G', [(0, 644, 290), (0.5, 644, 290), (1.6, 644, 220), (2.6, 780, 218), (3.4, 850, 216)] + green_tail),
+        ('C', [(0, 399, 290), (0.7, 399, 290), (2.4, 399, 150), (6.0, 399, 146)]),
+        ('B', [(0, 325, 421), (0.5, 325, 421), (1.8, 325, 302), (6.0, 325, 300)]),
+        ('P', [(0, 514, 430), (0.5, 514, 430), (1.8, 514, 302)] + purple_tail),
+        ('QB', [(0, 399, 328), (0.45, 399, 328), (1.0, 399, 366), (1.6, 399, 366), (2.6, 378, 380), (6.0, 372, 384)]),
+    ]
+
 PLAYS['b5'] = {
-    'title': 'Play 5: Shovel Pass to Green',
+    'title': 'Play 5: End-Around Red, Pump and Run',
+    'subtitle': 'Red takes the end-around right, stops and shows pass, then tucks it and runs up the right side',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.6, 'R')],
+    'los_y': EA_LOS, 'dur': 6.0,
+    'players': _ea_players(
+        red_tail=[(3.5, 640, 352), (4.2, 690, 290), (6.0, 704, 130)],
+        green_tail=[(6.0, 880, 150)],
+        purple_tail=[(6.0, 514, 300)]),
+}
+
+PLAYS['b6'] = {
+    'title': 'Play 6: End-Around Red, Out to Green',
+    'subtitle': 'Same end-around action — Red stops behind the line and throws the 5-yard out to Green',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.6, 'R'), (3.2, ('pass', 'R', 'G', 3.8)), (3.8, 'G')],
+    'los_y': EA_LOS, 'dur': 6.0,
+    'players': _ea_players(
+        red_tail=[(3.6, 640, 352), (6.0, 650, 340)],
+        green_tail=[(3.9, 872, 214), (6.0, 884, 120)],
+        purple_tail=[(6.0, 514, 300)]),
+}
+
+PLAYS['b7'] = {
+    'title': 'Play 7: End-Around Red, Shovel to Purple',
+    'subtitle': 'Same end-around action — Red stops and shovels forward to Purple waiting at the line',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.6, 'R'), (3.1, ('pass', 'R', 'P', 3.4)), (3.4, 'P')],
+    'los_y': EA_LOS, 'dur': 6.0,
+    'players': _ea_players(
+        red_tail=[(3.6, 640, 352), (6.0, 650, 340)],
+        green_tail=[(6.0, 880, 150)],
+        purple_tail=[(3.4, 514, 300), (4.2, 520, 240), (6.0, 526, 110)]),
+}
+
+# ------- Base Play 8: Shovel Pass to Green (must-pass) -------
+PLAYS['b8'] = {
+    'title': 'Play 8: Shovel Pass to Green',
     'subtitle': 'Tight 5-across line — everyone walks upfield, Green slides into the middle for a quick forward shovel',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.7, ('pass', 'QB', 'G', 3.0)), (3.0, 'G')],
     'players': [
@@ -186,9 +231,9 @@ PLAYS['b4'] = {
     ],
 }
 
-# ------- Base Play 11: Criss-Cross Double Fake, Quick In to Green -------
-PLAYS['b11'] = {
-    'title': 'Play 11: Criss-Cross Double Fake, Quick In to Green',
+# ------- Base Play 14: Criss-Cross Double Fake, Quick In to Green -------
+PLAYS['b14'] = {
+    'title': 'Play 14: Criss-Cross Double Fake, Quick In to Green',
     'subtitle': 'Fake to Blue, fake to Purple on the criss-cross — QB throws to Green on the quick in route',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.4, ('pass', 'QB', 'G', 2.8)), (2.8, 'G')],
     'players': [
@@ -201,9 +246,9 @@ PLAYS['b11'] = {
     ],
 }
 
-# ------- Base Play 12: Double Go, Deep Shot to Green -------
-PLAYS['b12'] = {
-    'title': 'Play 12: Double Go, Deep Shot to Green',
+# ------- Base Play 15: Double Go, Deep Shot to Green -------
+PLAYS['b15'] = {
+    'title': 'Play 15: Double Go, Deep Shot to Green',
     'subtitle': 'Red and Green sprint deep on go routes — QB drops straight back and throws deep to Green',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.6, ('pass', 'QB', 'G', 4.2)), (4.2, 'G')],
     'los_y': 420,
