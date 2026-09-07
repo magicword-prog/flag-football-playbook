@@ -156,9 +156,9 @@ PLAYS['b3'] = {
     ],
 }
 
-# ------- Base Play 6: Shovel Pass to Green (must-pass) -------
-PLAYS['b6'] = {
-    'title': 'Play 6: Shovel Pass to Green',
+# ------- Base Play 5: Shovel Pass to Green (must-pass) -------
+PLAYS['b5'] = {
+    'title': 'Play 5: Shovel Pass to Green',
     'subtitle': 'Tight 5-across line — everyone walks upfield, Green slides into the middle for a quick forward shovel',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.7, ('pass', 'QB', 'G', 3.0)), (3.0, 'G')],
     'players': [
@@ -168,21 +168,6 @@ PLAYS['b6'] = {
         ('P', [(0, 439, 214), (0.6, 439, 214), (5.0, 439, 122)]),
         ('G', [(0, 479, 214), (0.6, 479, 214), (1.4, 440, 220), (2.3, 402, 204), (3.2, 402, 204), (5.0, 402, 150)]),
         ('QB', [(0, 399, 252), (0.45, 399, 252), (1.0, 399, 278), (3.0, 399, 278), (5.0, 392, 284)]),
-    ],
-}
-
-# ------- Base Play 5: Criss-Cross Quick Handoff to Blue -------
-PLAYS['b5'] = {
-    'title': 'Play 5: Criss-Cross Quick Handoff to Blue',
-    'subtitle': 'Same criss-cross action, but Blue takes a quick handoff on his first cross and runs up the right side',
-    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (1.1, 'B')],
-    'players': [
-        ('R', [(0, 284, 214), (0.5, 284, 214), (1.4, 284, 150), (2.5, 360, 108), (4.0, 385, 98), (5.0, 390, 96)]),
-        ('G', [(0, 644, 214), (0.5, 644, 214), (1.6, 644, 142), (2.7, 560, 138), (4.0, 535, 136), (5.0, 530, 136)]),
-        ('C', [(0, 399, 214), (0.7, 399, 214), (5.0, 399, 128)]),
-        ('P', [(0, 514, 354), (0.6, 514, 354), (1.6, 428, 318), (2.4, 340, 300), (3.0, 310, 214), (5.0, 293, 110)]),
-        ('B', [(0, 325, 345), (0.3, 325, 345), (1.1, 408, 306), (2.1, 520, 295), (2.8, 562, 214), (5.0, 588, 106)]),
-        ('QB', [(0, 399, 252), (0.45, 399, 252), (1.0, 399, 288), (1.8, 399, 288), (2.6, 388, 300), (5.0, 384, 302)]),
     ],
 }
 
@@ -201,9 +186,9 @@ PLAYS['b4'] = {
     ],
 }
 
-# ------- Base Play 12: Criss-Cross Double Fake, Quick In to Green -------
-PLAYS['b12'] = {
-    'title': 'Play 12: Criss-Cross Double Fake, Quick In to Green',
+# ------- Base Play 11: Criss-Cross Double Fake, Quick In to Green -------
+PLAYS['b11'] = {
+    'title': 'Play 11: Criss-Cross Double Fake, Quick In to Green',
     'subtitle': 'Fake to Blue, fake to Purple on the criss-cross — QB throws to Green on the quick in route',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.4, ('pass', 'QB', 'G', 2.8)), (2.8, 'G')],
     'players': [
@@ -216,9 +201,9 @@ PLAYS['b12'] = {
     ],
 }
 
-# ------- Base Play 13: Double Go, Deep Shot to Green -------
-PLAYS['b13'] = {
-    'title': 'Play 13: Double Go, Deep Shot to Green',
+# ------- Base Play 12: Double Go, Deep Shot to Green -------
+PLAYS['b12'] = {
+    'title': 'Play 12: Double Go, Deep Shot to Green',
     'subtitle': 'Red and Green sprint deep on go routes — QB drops straight back and throws deep to Green',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.6, ('pass', 'QB', 'G', 4.2)), (4.2, 'G')],
     'los_y': 420,
