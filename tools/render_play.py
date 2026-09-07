@@ -41,7 +41,7 @@ def pos_at(waypoints, t):
     return waypoints[-1][1], waypoints[-1][2]
 
 
-def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y):
+def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y, goal_y=None):
     img = Image.new('RGB', (W * SS, H * SS), 'white')
     d = ImageDraw.Draw(img)
     s = SS
@@ -52,12 +52,26 @@ def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y):
     d.text(((W * s - sw) / 2, 40 * s), subtitle, font=F_SUB, fill=(100, 100, 100))
     # field
     x0, y0, x1, y1 = [v * s for v in FIELD]
+    if goal_y:
+        # end zone: shaded band from the top of the field down to the goal line, with pylons
+        d.rectangle([x0, y0, x1, goal_y * s], fill=(238, 238, 238))
+        ez = 'END ZONE'
+        ew = d.textlength(ez, font=F_TITLE)
+        d.text(((W * s - ew) / 2, (FIELD[1] + goal_y) / 2 * s - 11 * s), ez, font=F_TITLE, fill=(190, 190, 190))
     for yy in YARD_YS:
+        if goal_y and yy <= goal_y: continue
         d.line([(x0, yy * s), (x1, yy * s)], fill=(211, 211, 211), width=s)
+    if goal_y:
+        d.line([(x0, goal_y * s), (x1, goal_y * s)], fill='black', width=3 * s)
+        d.text((34 * s, (goal_y - 16) * s), 'GOAL LINE', font=F_SMALL, fill='black')
+        for px in (FIELD[0], FIELD[2]):
+            for py in (FIELD[1], goal_y):
+                d.rectangle([(px - 5) * s, (py - 5) * s, (px + 5) * s, (py + 5) * s], fill=(255, 140, 0), outline='black', width=s)
     d.rectangle([x0, y0, x1, y1], outline='black', width=2 * s)
     d.line([(x0, los_y * s), (x1, los_y * s)], fill='black', width=3 * s)
     d.text((34 * s, (los_y + 6) * s), 'LINE OF SCRIMMAGE', font=F_SMALL, fill='black')
-    d.text((800 * s, 88 * s), '^ Direction of Play', font=F_SMALL, fill='black')
+    if not goal_y:
+        d.text((800 * s, 88 * s), '^ Direction of Play', font=F_SMALL, fill='black')
     # players (draw order: line players first, then backs, QB last so overlaps look right)
     r = 15 * s
     for name, (px, py) in players:
@@ -106,7 +120,7 @@ def render(play, outdir):
             ball = (x0 + (x1 - x0) * f, y0 + (y1 - y0) * f)
         else:
             ball = pmap[carrier]
-        draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png', play.get('los_y', LOS_Y))
+        draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png', play.get('los_y', LOS_Y), play.get('goal_y'))
 
 
 PLAYS = {}
@@ -333,6 +347,34 @@ PLAYS['b15'] = {
         ('B', [(0, 325, 551), (0.5, 325, 551), (2.5, 342, 430), (3.2, 346, 425), (6.5, 350, 423)]),
         ('QB', [(0, 399, 458), (0.45, 399, 458), (1.2, 399, 516), (2.6, 399, 516), (3.0, 396, 512), (6.5, 395, 510)]),
     ],
+}
+
+# ======= Base Plays 16-17: Goal Line Rollout family (LOS 5 yds out, end zone drawn) =======
+GL_LOS, GL_GOAL = 290, 220
+def _gl_players(blue_tail, purple_tail):
+    return [
+        ('R', [(0, 154, 290), (0.5, 154, 290), (1.6, 380, 292), (6.0, 385, 292)]),
+        ('G', [(0, 644, 290), (0.5, 644, 290), (1.6, 644, 222), (2.6, 860, 222), (6.0, 905, 222)]),
+        ('C', [(0, 399, 290), (0.7, 399, 290), (2.6, 399, 100), (6.0, 402, 102)]),
+        ('B', [(0, 325, 290), (0.5, 325, 290), (1.2, 345, 312), (2.4, 470, 312), (3.0, 530, 310)] + blue_tail),
+        ('P', [(0, 514, 290), (0.5, 514, 290), (1.9, 520, 130), (3.0, 800, 98), (3.6, 870, 96)] + purple_tail),
+        ('QB', [(0, 399, 328), (0.45, 399, 328), (1.0, 420, 370), (2.2, 540, 372), (3.0, 600, 360), (3.4, 620, 352), (6.0, 630, 350)]),
+    ]
+
+PLAYS['b16'] = {
+    'title': 'Play 16: Goal Line Rollout, Corner to Purple',
+    'subtitle': 'Blue and Purple on the line — QB rolls right and throws to Purple on the deep out to the back corner',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.3, ('pass', 'QB', 'P', 3.9)), (3.9, 'P')],
+    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0,
+    'players': _gl_players(blue_tail=[(3.6, 590, 306), (6.0, 650, 262)], purple_tail=[(6.0, 890, 96)]),
+}
+
+PLAYS['b17'] = {
+    'title': 'Play 17: Goal Line Rollout, Shovel to Blue',
+    'subtitle': 'Same rollout action — Blue crosses in front of the QB and takes the shovel into the end zone',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.0, ('pass', 'QB', 'B', 3.25)), (3.25, 'B')],
+    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0,
+    'players': _gl_players(blue_tail=[(3.3, 556, 300), (4.0, 570, 230), (6.0, 585, 120)], purple_tail=[(6.0, 890, 96)]),
 }
 
 if __name__ == '__main__':
