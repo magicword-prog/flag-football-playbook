@@ -260,7 +260,7 @@ PLAYS['b4'] = {
     ],
 }
 
-# ======= Base Plays 9, 10, 12, 13: recovered from the original videos with tools/track_video.py =======
+# ======= Base Plays 9, 10: recovered from the original videos with tools/track_video.py =======
 PLAYS['b9'] = {
     'title': 'Play 9: Reverse Red to Green',
     'subtitle': 'QB hands to Red on the end-around right — Red hands to Green coming back on the reverse up the left side',
@@ -289,37 +289,9 @@ PLAYS['b10'] = {
     ],
 }
 
+# ------- Base Play 12: Criss-Cross Double Fake, Quick In to Green -------
 PLAYS['b12'] = {
-    'title': 'Play 12: Quick Handoff to Purple',
-    'subtitle': 'Quick handoff to Purple straight up the middle — Red runs the end-around motion as a decoy',
-    'ball': [(0, 'PRESNAP'), (0.55, 'QB'), (1.1, 'P')],
-    'players': [
-        ('R', [(0.0, 285, 215), (0.53, 285, 215), (0.63, 290, 222), (0.87, 328, 254), (1.2, 401, 282), (4.5, 725, 280), (5.0, 725, 280)]),
-        ('G', [(0.0, 645, 215), (0.5, 645, 215), (3.33, 645, 100), (5.0, 646, 86)]),
-        ('C', [(0.0, 397, 214), (0.5, 397, 214), (4.3, 395, 101), (5.0, 392, 99)]),
-        ('P', [(0.0, 475, 330), (0.57, 473, 327), (0.97, 435, 251), (1.13, 428, 226), (1.27, 425, 227), (3.87, 425, 101), (4.37, 425, 87), (5.0, 425, 60)]),
-        ('B', [(0.0, 325, 330), (0.5, 325, 330), (5.0, 325, 191)]),
-        ('QB', [(0.0, 399, 253), (0.63, 395, 254), (1.13, 400, 254), (5.0, 404, 254)]),
-    ],
-}
-
-PLAYS['b13'] = {
-    'title': 'Play 13: End-Around Pass, Red to Green',
-    'subtitle': 'Red takes the end-around right, pulls up behind the line, and throws to Green on the deep out',
-    'ball': [(0, 'PRESNAP'), (0.55, 'QB'), (1.4, 'R'), (3.55, ('pass', 'R', 'G', 4.25)), (4.25, 'G')],
-    'players': [
-        ('R', [(0.0, 285, 215), (0.53, 285, 215), (0.67, 291, 223), (0.97, 335, 258), (1.3, 399, 278), (1.37, 403, 284), (3.33, 615, 272), (3.87, 630, 275), (5.0, 630, 275)]),
-        ('G', [(0.0, 645, 215), (0.6, 645, 215), (0.77, 645, 209), (1.5, 645, 120), (1.77, 645, 100), (2.03, 661, 100), (2.4, 728, 100), (2.6, 745, 100), (4.63, 745, 101), (5.0, 745, 80)]),
-        ('C', [(0.0, 397, 214), (0.5, 397, 214), (4.23, 397, 102), (5.0, 392, 99)]),
-        ('P', [(0.0, 475, 330), (1.4, 475, 330), (5.0, 475, 191)]),
-        ('B', [(0.0, 325, 330), (1.4, 325, 330), (5.0, 325, 191)]),
-        ('QB', [(0.0, 399, 253), (0.53, 395, 254), (1.4, 400, 251), (2.17, 371, 269), (5.0, 373, 271)]),
-    ],
-}
-
-# ------- Base Play 14: Criss-Cross Double Fake, Quick In to Green -------
-PLAYS['b14'] = {
-    'title': 'Play 14: Criss-Cross Double Fake, Quick In to Green',
+    'title': 'Play 12: Criss-Cross Double Fake, Quick In to Green',
     'subtitle': 'Fake to Blue, fake to Purple on the criss-cross — QB throws to Green on the quick in route',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.4, ('pass', 'QB', 'G', 2.8)), (2.8, 'G')],
     'players': [
@@ -332,9 +304,9 @@ PLAYS['b14'] = {
     ],
 }
 
-# ------- Base Play 15: Double Go, Deep Shot to Green -------
-PLAYS['b15'] = {
-    'title': 'Play 15: Double Go, Deep Shot to Green',
+# ------- Base Play 13: Double Go, Deep Shot to Green -------
+PLAYS['b13'] = {
+    'title': 'Play 13: Double Go, Deep Shot to Green',
     'subtitle': 'Red and Green sprint deep on go routes — QB drops straight back and throws deep to Green',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.6, ('pass', 'QB', 'G', 4.2)), (4.2, 'G')],
     'los_y': 420,
@@ -349,7 +321,7 @@ PLAYS['b15'] = {
     ],
 }
 
-# ======= Base Plays 16-17: Goal Line Rollout family (LOS 5 yds out, end zone drawn) =======
+# ======= Base Plays 14-15: Goal Line Rollout family (LOS 5 yds out, end zone drawn) =======
 GL_LOS, GL_GOAL = 290, 220
 def _gl_players(blue_tail, purple_tail):
     return [
@@ -361,16 +333,16 @@ def _gl_players(blue_tail, purple_tail):
         ('QB', [(0, 399, 328), (0.45, 399, 328), (1.0, 420, 370), (2.2, 540, 372), (3.0, 600, 360), (3.4, 620, 352), (6.0, 630, 350)]),
     ]
 
-PLAYS['b16'] = {
-    'title': 'Play 16: Goal Line Rollout, Corner to Purple',
+PLAYS['b14'] = {
+    'title': 'Play 14: Goal Line Rollout, Corner to Purple',
     'subtitle': 'Blue and Purple on the line — QB rolls right and throws to Purple on the deep out to the back corner',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.3, ('pass', 'QB', 'P', 3.9)), (3.9, 'P')],
     'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0,
     'players': _gl_players(blue_tail=[(3.6, 590, 306), (6.0, 650, 262)], purple_tail=[(6.0, 890, 96)]),
 }
 
-PLAYS['b17'] = {
-    'title': 'Play 17: Goal Line Rollout, Shovel to Blue',
+PLAYS['b15'] = {
+    'title': 'Play 15: Goal Line Rollout, Shovel to Blue',
     'subtitle': 'Same rollout action — Blue crosses in front of the QB and takes the shovel into the end zone',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.0, ('pass', 'QB', 'B', 3.25)), (3.25, 'B')],
     'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0,
