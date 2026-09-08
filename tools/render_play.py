@@ -17,6 +17,8 @@ COL = {
     'P': (155, 109, 215), 'C': (208, 208, 208), 'QB': (255, 248, 208),
 }
 DARK_TEXT = {'C', 'QB'}
+# route-line colors: pale dots get a darker line so the dotted path reads on white
+ROUTE_COL = dict(COL, C=(150, 150, 150), QB=(222, 170, 0))
 
 F_TITLE = ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', 22 * SS)
 F_SUB = ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', 13 * SS)
@@ -41,7 +43,46 @@ def pos_at(waypoints, t):
     return waypoints[-1][1], waypoints[-1][2]
 
 
-def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y, goal_y=None):
+def draw_dotted_route(d, pts, color, s, dash=7, gap=6, width=4):
+    """Dotted polyline through pts (already scaled) with a small arrowhead at the end."""
+    import math
+    on, carry = True, 0.0
+    for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+        seg = math.hypot(bx - ax, by - ay)
+        if seg == 0: continue
+        ux, uy = (bx - ax) / seg, (by - ay) / seg
+        pos = 0.0
+        while pos < seg:
+            run = (dash if on else gap) - carry
+            end = min(seg, pos + run)
+            if on:
+                d.line([(ax + ux * pos, ay + uy * pos), (ax + ux * end, ay + uy * end)], fill=color, width=width * s)
+            if end >= seg:
+                carry += seg - pos
+                if carry >= (dash if on else gap):
+                    carry = 0; on = not on
+            else:
+                carry = 0; on = not on
+            pos = end
+    # arrowhead
+    (ax, ay), (bx, by) = pts[-2], pts[-1]
+    ang = math.atan2(by - ay, bx - ax)
+    L = 9 * s
+    p1 = (bx - L * math.cos(ang - 0.5), by - L * math.sin(ang - 0.5))
+    p2 = (bx - L * math.cos(ang + 0.5), by - L * math.sin(ang + 0.5))
+    d.polygon([(bx, by), p1, p2], fill=color)
+
+
+def route_points(waypoints):
+    """Distinct consecutive positions from a waypoint list (the path the dot will trace)."""
+    pts = []
+    for _, x, y in waypoints:
+        if not pts or (x, y) != pts[-1]:
+            pts.append((x, y))
+    return pts
+
+
+def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y, goal_y=None, routes=None):
     img = Image.new('RGB', (W * SS, H * SS), 'white')
     d = ImageDraw.Draw(img)
     s = SS
@@ -72,6 +113,10 @@ def draw_frame(title, subtitle, players, ball_xy, out_path, los_y=LOS_Y, goal_y=
     d.text((34 * s, (los_y + 6) * s), 'LINE OF SCRIMMAGE', font=F_SMALL, fill='black')
     if not goal_y:
         d.text((800 * s, 88 * s), '^ Direction of Play', font=F_SMALL, fill='black')
+    # dotted routes (drawn under the players so the dots ride on top of their own line)
+    for name, pts in (routes or []):
+        if len(pts) < 2: continue
+        draw_dotted_route(d, [(x * s, y * s) for x, y in pts], ROUTE_COL[name], s, dash=7 * s, gap=6 * s)
     # players (draw order: line players first, then backs, QB last so overlaps look right)
     r = 15 * s
     for name, (px, py) in players:
@@ -100,6 +145,7 @@ def render(play, outdir):
         shutil.rmtree(outdir)
     os.makedirs(outdir)
     nframes = int(FPS * play.get('dur', DUR))
+    routes = [(name, route_points(wps)) for name, wps in play['players']] if play.get('routes') else None
     for n in range(nframes):
         t = n / FPS
         players = [(name, pos_at(wps, t)) for name, wps in play['players']]
@@ -120,7 +166,7 @@ def render(play, outdir):
             ball = (x0 + (x1 - x0) * f, y0 + (y1 - y0) * f)
         else:
             ball = pmap[carrier]
-        draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png', play.get('los_y', LOS_Y), play.get('goal_y'))
+        draw_frame(play['title'], play['subtitle'], players, ball, f'{outdir}/f{n:04d}.png', play.get('los_y', LOS_Y), play.get('goal_y'), routes)
 
 
 PLAYS = {}
@@ -305,7 +351,7 @@ PLAYS['b12'] = {
     'title': 'Play 12: Goal Line Rollout, Corner to Purple',
     'subtitle': 'Blue and Purple on the line — QB rolls right and throws to Purple on the deep out to the back corner',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.3, ('pass', 'QB', 'P', 3.9)), (3.9, 'P')],
-    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0,
+    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0, 'routes': True,
     'players': _gl_players(blue_tail=[(3.6, 590, 306), (6.0, 650, 262)], purple_tail=[(6.0, 890, 96)]),
 }
 
@@ -313,7 +359,7 @@ PLAYS['b13'] = {
     'title': 'Play 13: Goal Line Rollout, Shovel to Blue',
     'subtitle': 'Same rollout action — Blue crosses in front of the QB and takes the shovel into the end zone',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.0, ('pass', 'QB', 'B', 3.25)), (3.25, 'B')],
-    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0,
+    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0, 'routes': True,
     'players': _gl_players(blue_tail=[(3.3, 556, 300), (4.0, 570, 230), (6.0, 585, 120)], purple_tail=[(6.0, 890, 96)]),
 }
 
