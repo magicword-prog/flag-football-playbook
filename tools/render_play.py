@@ -152,8 +152,14 @@ def render(play, outdir):
         shutil.rmtree(outdir)
     os.makedirs(outdir)
     nframes = int(FPS * play.get('dur', DUR))
-    cuts = play.get('route_cut', {})
-    routes = [(name, route_points(wps, cuts.get(name))) for name, wps in play['players']] if play.get('routes') else None
+    # dotted routes: on by default. A pass target's line stops where the catch happens
+    # (running the line into the end zone confused the kids); 'route_cut' overrides per player.
+    cuts = {}
+    for _, c in play['ball']:
+        if isinstance(c, tuple) and c[0] == 'pass':
+            cuts[c[2]] = c[3]
+    cuts.update(play.get('route_cut', {}))
+    routes = [(name, route_points(wps, cuts.get(name))) for name, wps in play['players']] if play.get('routes', True) else None
     for n in range(nframes):
         t = n / FPS
         players = [(name, pos_at(wps, t)) for name, wps in play['players']]
@@ -359,7 +365,7 @@ PLAYS['b12'] = {
     'title': 'Play 12: Goal Line Rollout, Corner to Purple',
     'subtitle': 'Blue and Purple on the line — QB rolls right and throws to Purple on the deep out to the back corner',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.3, ('pass', 'QB', 'P', 3.9)), (3.9, 'P')],
-    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0, 'routes': True, 'route_cut': {'B': 3.0},
+    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0, 'route_cut': {'B': 3.0},
     'players': _gl_players(blue_tail=[(3.6, 590, 306), (6.0, 650, 262)], purple_tail=[(6.0, 890, 96)]),
 }
 
@@ -367,7 +373,7 @@ PLAYS['b13'] = {
     'title': 'Play 13: Goal Line Rollout, Shovel to Blue',
     'subtitle': 'Same rollout action — Blue crosses in front of the QB and takes the shovel into the end zone',
     'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.0, ('pass', 'QB', 'B', 3.25)), (3.25, 'B')],
-    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0, 'routes': True, 'route_cut': {'B': 3.0},
+    'los_y': GL_LOS, 'goal_y': GL_GOAL, 'dur': 6.0, 'route_cut': {'B': 3.0},
     'players': _gl_players(blue_tail=[(3.3, 556, 300), (4.0, 570, 230), (6.0, 585, 120)], purple_tail=[(6.0, 890, 96)]),
 }
 
