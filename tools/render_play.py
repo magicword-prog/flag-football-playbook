@@ -399,6 +399,22 @@ PLAYS['b14'] = {
 }
 
 # ======= Trips Plays 1-5 (waypoints recovered from the original videos via tools/track_video.py, 2026-09-09) =======
+PLAYS['b15'] = {
+    'title': 'Play 15: Fake End-Around Green, Delayed Handoff to Purple',
+    'subtitle': 'Same look as Play 14 — QB fakes to Green, waits, then hands to Purple on the delayed counter to the right',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.0, 'P')],
+    'los_y': EA_LOS, 'dur': 6.0,
+    # Identical to Play 14 through the fake and the Center's turnaround; only the backs and the ball differ.
+    'players': [
+        ('R', [(0, 154, 290), (0.5, 154, 290), (1.0, 154, 262), (2.2, 290, 236), (6.0, 300, 232)]),
+        ('G', [(0, 644, 290), (0.4, 644, 290), (1.0, 498, 350), (1.6, 368, 372), (2.4, 208, 362), (3.0, 148, 340), (3.8, 118, 270), (6.0, 108, 110)]),
+        ('C', [(0, 399, 290), (0.7, 399, 290), (2.4, 399, 178), (2.8, 399, 186), (3.5, 399, 186), (6.0, 410, 90)]),
+        ('B', [(0, 325, 421), (3.0, 325, 421), (4.0, 335, 330), (6.0, 340, 300)]),
+        ('P', [(0, 514, 430), (2.2, 514, 430), (2.7, 470, 400), (3.0, 440, 376), (3.6, 545, 335), (4.2, 615, 290), (6.0, 645, 95)]),
+        ('QB', [(0, 399, 328), (0.45, 399, 328), (1.0, 399, 366), (1.6, 399, 366), (2.2, 405, 372), (3.0, 408, 372), (6.0, 408, 374)]),
+    ],
+}
+
 PLAYS['t1'] = {
     'title': 'Play 1: Rollout Handoff to Blue',
     'subtitle': 'QB rolls right, hands to Blue, Blue runs outside Green, Purple counter-motion',
