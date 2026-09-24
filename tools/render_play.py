@@ -152,14 +152,15 @@ def render(play, outdir):
         shutil.rmtree(outdir)
     os.makedirs(outdir)
     nframes = int(FPS * play.get('dur', DUR))
-    # dotted routes: on by default. A pass target's line stops where the catch happens
-    # (running the line into the end zone confused the kids); 'route_cut' overrides per player.
+    # dotted routes: OFF by default (2026-09-24: the dotted lines confused the kids). Set
+    # 'routes': True on a play to draw them; a pass target's line then stops at the catch,
+    # and 'route_cut' overrides per player.
     cuts = {}
     for _, c in play['ball']:
         if isinstance(c, tuple) and c[0] == 'pass':
             cuts[c[2]] = c[3]
     cuts.update(play.get('route_cut', {}))
-    routes = [(name, route_points(wps, cuts.get(name))) for name, wps in play['players']] if play.get('routes', True) else None
+    routes = [(name, route_points(wps, cuts.get(name))) for name, wps in play['players']] if play.get('routes', False) else None
     for n in range(nframes):
         t = n / FPS
         players = [(name, pos_at(wps, t)) for name, wps in play['players']]
