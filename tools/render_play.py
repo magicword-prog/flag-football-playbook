@@ -485,6 +485,85 @@ PLAYS['t5'] = {
     ],
 }
 
+# ======= Pitch Plays 1-6: one set of assignments, six calls (LOS one yard-line deeper for backfield room) =======
+# QB under center, Red 3 big steps straight behind her, Purple beside Red, Blue wide left, Green wide right.
+# Every play: QB turns and pitches (or fakes the pitch) straight back to Red, Purple crosses in front of Red
+# going left, Red rolls right. Blue runs the post, Green the 7-yard out, Center the 8-yard turnaround, and the
+# QB slips out to the right flat after a real pitch. Only who ends up with the ball changes.
+PITCH_LOS = 290
+PITCH_BALL = [(0, 'PRESNAP'), (0.45, 'QB'), (0.8, ('pass', 'QB', 'R', 1.1)), (1.1, 'R')]
+def _pitch_players(red_tail, purple_tail=None, green_tail=None, blue_tail=None, c_tail=None, qb_path=None):
+    return [
+        ('B', [(0, 154, 290), (0.5, 154, 290), (1.7, 160, 200), (3.0, 270, 135)] + (blue_tail or [(3.8, 318, 108), (6.0, 335, 98)])),
+        ('G', [(0, 644, 290), (0.5, 644, 290), (1.7, 644, 190), (2.7, 740, 188), (3.4, 790, 186)] + (green_tail or [(6.0, 830, 120)])),
+        ('C', [(0, 399, 290), (0.7, 399, 290), (2.4, 399, 178), (2.8, 399, 186)] + (c_tail or [(6.0, 399, 186)])),
+        ('P', [(0, 510, 410), (0.5, 510, 410), (1.6, 420, 382), (2.5, 280, 380), (3.2, 190, 350), (3.8, 150, 292)] + (purple_tail or [(6.0, 128, 110)])),
+        ('R', [(0, 399, 410), (1.1, 399, 410), (1.6, 404, 408), (2.4, 520, 412), (3.0, 610, 395)] + red_tail),
+        ('QB', qb_path or [(0, 399, 328), (1.0, 399, 328), (1.7, 470, 312), (2.5, 570, 266), (3.2, 640, 262), (6.0, 662, 160)]),
+    ]
+
+# QB on the fake-pitch plays: turn and show the pitch, pull it back, turn around and set to throw
+# (she stays up by the Center so the Red/Purple fake mesh happens clear behind her)
+_PITCH_QB_KEEP = [(0, 399, 328), (0.45, 399, 328), (1.0, 399, 334), (1.8, 399, 330), (6.0, 399, 330)]
+
+PLAYS['p1'] = {
+    'title': 'Play 1: Pitch, Sweep Left to Purple',
+    'subtitle': 'QB pitches straight back to Red — Red hands to Purple crossing in front of her, and Purple sweeps around the left end',
+    'ball': PITCH_BALL + [(1.6, 'P')],
+    'los_y': PITCH_LOS, 'dur': 6.0,
+    'players': _pitch_players(red_tail=[(3.6, 665, 372), (4.4, 715, 300), (6.0, 730, 180)]),
+}
+
+PLAYS['p2'] = {
+    'title': 'Play 2: Pitch, Fake Sweep, Red Keeps It',
+    'subtitle': 'Same action — Red fakes the handoff to Purple, keeps the ball, and runs around the right end behind the QB',
+    'ball': PITCH_BALL,
+    'los_y': PITCH_LOS, 'dur': 6.0,
+    'players': _pitch_players(red_tail=[(3.6, 665, 372), (4.3, 715, 295), (6.0, 730, 105)]),
+}
+
+PLAYS['p3'] = {
+    'title': 'Play 3: Pitch, Boot Pass Out to Green',
+    'subtitle': 'Same action — Red fakes the handoff to Purple, rolls right, and throws the 7-yard out to Green',
+    'ball': PITCH_BALL + [(3.1, ('pass', 'R', 'G', 3.7)), (3.7, 'G')],
+    'los_y': PITCH_LOS, 'dur': 6.0,
+    'players': _pitch_players(
+        red_tail=[(3.6, 632, 388), (6.0, 640, 384)],
+        green_tail=[(3.8, 806, 184), (6.0, 830, 100)]),
+}
+
+PLAYS['p4'] = {
+    'title': 'Play 4: Pitch, Boot Pass Back to the QB',
+    'subtitle': 'Same action — after the pitch the QB slips out to the right flat, and Red rolls right and throws it back to her',
+    'ball': PITCH_BALL + [(2.9, ('pass', 'R', 'QB', 3.3)), (3.3, 'QB')],
+    'los_y': PITCH_LOS, 'dur': 6.0,
+    'players': _pitch_players(
+        red_tail=[(3.6, 632, 388), (6.0, 640, 384)],
+        qb_path=[(0, 399, 328), (1.0, 399, 328), (1.7, 470, 312), (2.5, 570, 266), (3.2, 640, 262), (3.5, 648, 258), (4.3, 690, 200), (6.0, 708, 100)]),
+}
+
+PLAYS['p5'] = {
+    'title': 'Play 5: Fake Pitch, Post to Blue',
+    'subtitle': 'QB fakes the pitch and keeps it — Red and Purple carry out the sweep fake, and the QB throws deep down the middle to Blue',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (3.0, ('pass', 'QB', 'B', 3.7)), (3.7, 'B')],
+    'los_y': PITCH_LOS, 'dur': 6.0,
+    'players': _pitch_players(
+        red_tail=[(3.6, 665, 372), (4.4, 715, 300), (6.0, 730, 180)],
+        blue_tail=[(3.7, 312, 112), (6.0, 345, 92)],
+        qb_path=_PITCH_QB_KEEP),
+}
+
+PLAYS['p6'] = {
+    'title': 'Play 6: Fake Pitch, Turnaround to Center',
+    'subtitle': 'QB fakes the pitch and keeps it — Center runs 8 yards up the middle and turns around, and the QB throws it to her',
+    'ball': [(0, 'PRESNAP'), (0.45, 'QB'), (2.6, ('pass', 'QB', 'C', 3.1)), (3.1, 'C')],
+    'los_y': PITCH_LOS, 'dur': 6.0,
+    'players': _pitch_players(
+        red_tail=[(3.6, 665, 372), (4.4, 715, 300), (6.0, 730, 180)],
+        c_tail=[(3.3, 399, 186), (6.0, 430, 92)],
+        qb_path=_PITCH_QB_KEEP),
+}
+
 if __name__ == '__main__':
     n = sys.argv[1]
     outdir = f'.videos/frames{n}'
