@@ -491,7 +491,7 @@ PLAYS['t5'] = {
 # Every play: QB turns and pitches (or fakes the pitch) straight back to Blue, Purple crosses in front of Blue
 # going left, Blue rolls right. Red runs a shallow post and stops, Green the 7-yard out and stops, Center angles right
 # to an 8-yard stop, and the QB slips out to the right flat after a real pitch. Only who ends up with the
-# ball changes. Every pass target is standing still at the catch (the girls can't catch on the run yet).
+# ball changes. Purple does not move until Blue has caught the pitch. Every pass target is standing still at the catch (the girls can't catch on the run yet).
 PITCH_LOS = 290
 PITCH_BALL = [(0, 'PRESNAP'), (0.45, 'QB'), (0.8, ('pass', 'QB', 'B', 1.1)), (1.1, 'B')]
 def _pitch_players(blue_tail, purple_tail=None, green_tail=None, red_tail=None, c_tail=None, qb_path=None):
@@ -499,20 +499,20 @@ def _pitch_players(blue_tail, purple_tail=None, green_tail=None, red_tail=None, 
         ('R', [(0, 154, 290), (0.5, 154, 290), (1.5, 158, 225), (2.6, 275, 172), (3.0, 280, 178)] + (red_tail or [(6.0, 280, 178)])),
         ('G', [(0, 644, 290), (0.5, 644, 290), (1.7, 644, 190), (2.7, 740, 188), (3.4, 790, 186)] + (green_tail or [(6.0, 790, 186)])),
         ('C', [(0, 399, 290), (0.7, 399, 290), (2.4, 492, 178), (2.8, 488, 186)] + (c_tail or [(6.0, 488, 186)])),
-        ('P', [(0, 510, 410), (0.5, 510, 410), (1.6, 420, 382), (2.5, 280, 380), (3.2, 190, 350), (3.8, 150, 292)] + (purple_tail or [(6.0, 128, 110)])),
-        ('B', [(0, 399, 410), (1.1, 399, 410), (1.6, 404, 408), (2.4, 520, 412), (3.0, 610, 395)] + blue_tail),
+        ('P', [(0, 510, 410), (1.15, 510, 410), (2.0, 420, 382), (2.9, 280, 380), (3.6, 190, 350), (4.2, 150, 292)] + (purple_tail or [(6.0, 128, 110)])),
+        ('B', [(0, 399, 410), (1.1, 399, 410), (2.0, 404, 408), (2.8, 520, 412), (3.4, 610, 395)] + blue_tail),
         ('QB', qb_path or [(0, 399, 328), (1.0, 399, 328), (1.7, 470, 312), (2.5, 570, 266), (3.2, 640, 262), (6.0, 662, 160)]),
     ]
 
 # QB on the fake-pitch plays: turn and show the pitch, pull it back, turn around and set to throw
 # (she stays up by the Center so the Blue/Purple fake mesh happens clear behind her)
 _PITCH_QB_KEEP = [(0, 399, 328), (0.45, 399, 328), (1.0, 399, 334), (1.8, 399, 330), (6.0, 399, 330)]
-_PITCH_BLUE_FAKE = [(3.6, 665, 372), (4.4, 715, 300), (6.0, 730, 180)]
+_PITCH_BLUE_FAKE = [(4.0, 665, 372), (4.8, 715, 300), (6.0, 728, 215)]
 
 PLAYS['p1'] = {
     'title': 'Play 1: Pitch, Sweep Left to Purple',
     'subtitle': 'QB pitches straight back to Blue — Blue hands to Purple crossing in front of her, and Purple sweeps around the left end',
-    'ball': PITCH_BALL + [(1.6, 'P')],
+    'ball': PITCH_BALL + [(2.0, 'P')],
     'los_y': PITCH_LOS, 'dur': 6.0,
     'players': _pitch_players(blue_tail=_PITCH_BLUE_FAKE),
 }
@@ -522,27 +522,27 @@ PLAYS['p2'] = {
     'subtitle': 'Same action — Blue fakes the handoff to Purple, keeps the ball, and runs around the right end behind the QB',
     'ball': PITCH_BALL,
     'los_y': PITCH_LOS, 'dur': 6.0,
-    'players': _pitch_players(blue_tail=[(3.6, 665, 372), (4.3, 715, 295), (6.0, 730, 105)]),
+    'players': _pitch_players(blue_tail=[(4.0, 665, 372), (4.7, 715, 295), (6.0, 730, 125)]),
 }
 
 PLAYS['p3'] = {
     'title': 'Play 3: Pitch, Boot Pass Out to Green',
     'subtitle': 'Same action — Blue fakes the handoff to Purple, rolls right, and throws the 7-yard out to Green, who stops and waits for it',
-    'ball': PITCH_BALL + [(3.1, ('pass', 'B', 'G', 3.7)), (3.7, 'G')],
+    'ball': PITCH_BALL + [(3.5, ('pass', 'B', 'G', 4.1)), (4.1, 'G')],
     'los_y': PITCH_LOS, 'dur': 6.0,
     'players': _pitch_players(
-        blue_tail=[(3.6, 632, 388), (6.0, 640, 384)],
-        green_tail=[(3.9, 790, 186), (6.0, 830, 100)]),
+        blue_tail=[(4.0, 632, 388), (6.0, 640, 384)],
+        green_tail=[(4.3, 790, 186), (6.0, 830, 100)]),
 }
 
 PLAYS['p4'] = {
     'title': 'Play 4: Pitch, Boot Pass Back to the QB',
     'subtitle': 'Same action — after the pitch the QB slips out to the right flat and stops, and Blue rolls right and throws it back to her',
-    'ball': PITCH_BALL + [(2.9, ('pass', 'B', 'QB', 3.4)), (3.4, 'QB')],
+    'ball': PITCH_BALL + [(3.3, ('pass', 'B', 'QB', 3.8)), (3.8, 'QB')],
     'los_y': PITCH_LOS, 'dur': 6.0,
     'players': _pitch_players(
-        blue_tail=[(3.6, 632, 388), (6.0, 640, 384)],
-        qb_path=[(0, 399, 328), (1.0, 399, 328), (1.7, 470, 312), (2.5, 570, 266), (3.1, 640, 262), (3.6, 640, 262), (4.4, 690, 200), (6.0, 708, 100)]),
+        blue_tail=[(4.0, 632, 388), (6.0, 640, 384)],
+        qb_path=[(0, 399, 328), (1.0, 399, 328), (1.7, 470, 312), (2.5, 570, 266), (3.1, 640, 262), (4.0, 640, 262), (4.8, 690, 200), (6.0, 706, 120)]),
 }
 
 PLAYS['p5'] = {
