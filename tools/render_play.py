@@ -489,7 +489,7 @@ PLAYS['t5'] = {
 # Colors match Base: Red wide left on the line, Blue in the backfield. QB under center, Blue 3 big steps
 # straight behind her, Purple beside Blue, Green wide right.
 # Every play: QB turns and pitches (or fakes the pitch) straight back to Blue, Purple crosses in front of Blue
-# going left, Blue rolls right. Red runs a shallow post and stops, Green the 7-yard out, Center angles right
+# going left, Blue rolls right. Red runs a shallow post and stops, Green the 7-yard out and stops, Center angles right
 # to an 8-yard stop, and the QB slips out to the right flat after a real pitch. Only who ends up with the
 # ball changes. Every pass target is standing still at the catch (the girls can't catch on the run yet).
 PITCH_LOS = 290
@@ -497,7 +497,7 @@ PITCH_BALL = [(0, 'PRESNAP'), (0.45, 'QB'), (0.8, ('pass', 'QB', 'B', 1.1)), (1.
 def _pitch_players(blue_tail, purple_tail=None, green_tail=None, red_tail=None, c_tail=None, qb_path=None):
     return [
         ('R', [(0, 154, 290), (0.5, 154, 290), (1.5, 158, 225), (2.6, 275, 172), (3.0, 280, 178)] + (red_tail or [(6.0, 280, 178)])),
-        ('G', [(0, 644, 290), (0.5, 644, 290), (1.7, 644, 190), (2.7, 740, 188), (3.4, 790, 186)] + (green_tail or [(6.0, 830, 120)])),
+        ('G', [(0, 644, 290), (0.5, 644, 290), (1.7, 644, 190), (2.7, 740, 188), (3.4, 790, 186)] + (green_tail or [(6.0, 790, 186)])),
         ('C', [(0, 399, 290), (0.7, 399, 290), (2.4, 492, 178), (2.8, 488, 186)] + (c_tail or [(6.0, 488, 186)])),
         ('P', [(0, 510, 410), (0.5, 510, 410), (1.6, 420, 382), (2.5, 280, 380), (3.2, 190, 350), (3.8, 150, 292)] + (purple_tail or [(6.0, 128, 110)])),
         ('B', [(0, 399, 410), (1.1, 399, 410), (1.6, 404, 408), (2.4, 520, 412), (3.0, 610, 395)] + blue_tail),
